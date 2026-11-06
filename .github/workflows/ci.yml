@@ -1,0 +1,52 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+  workflow_dispatch:
+  workflow_call:
+
+permissions:
+  contents: read
+
+jobs:
+  ci:
+    name: Check (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-26.04, macos-26]
+    steps:
+      - name: Check out source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Set up Python
+        uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: "3.12"
+
+      - name: Check formatting
+        run: cargo fmt --all -- --check
+
+      - name: Run Clippy
+        run: cargo clippy --workspace --all-targets --locked -- -D warnings
+
+      - name: Run Rust tests
+        run: cargo test --workspace --locked
+
+      - name: Build native server
+        run: cargo build --release --locked -p markdown-folds-server
+
+      - name: Run protocol tests
+        run: python3 tests/protocol.py
+
+      - name: Check documentation
+        run: cargo doc --workspace --no-deps --locked
+
+      - name: Build Zed extension for WebAssembly
+        run: |
+          rustup target add wasm32-wasip2
+          cargo build --release --locked -p markdown-folds --target wasm32-wasip2

@@ -1,0 +1,11 @@
+id = "markdown-folds-lsp"
+name = "Markdown Folds"
+version = "0.1.0"
+schema_version = 1
+authors = ["DarkaMaul"]
+repository = "https://github.com/DarkaMaul/zed-markdown-plus"
+description = "Local Markdown heading folds and bundled fenced-code highlighting."
+
+[language_servers.markdown-folds]
+name = "Markdown Folds"
+languages = ["Markdown"]

@@ -1,0 +1,26 @@
+[package]
+name = "markdown-folds"
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.96"
+license = "Apache-2.0"
+authors = ["DarkaMaul"]
+repository = "https://github.com/DarkaMaul/zed-markdown-plus"
+description = "Zed integration for Markdown heading folds and fenced-code highlighting"
+publish = false
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+zed_extension_api = "0.7.0"
+
+[[package.metadata.release.pre-release-replacements]]
+file = "extension.toml"
+search = '^version = "[^"]+"'
+replace = 'version = "{{version}}"'
+exactly = 1
+
+[workspace]
+members = ["server"]
+resolver = "2"

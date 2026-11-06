@@ -1,0 +1,7 @@
+publish = false
+push = false
+shared-version = true
+consolidate-commits = true
+tag-prefix = ""
+tag-name = "v{{version}}"
+
